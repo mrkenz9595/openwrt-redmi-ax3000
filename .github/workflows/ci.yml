@@ -34,6 +34,7 @@ jobs:
         run: |
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          git clone --depth 1 https://github.com/RADIUSdesk/openwrt-meshdesk
 
       - name: Configure
         run: |
@@ -55,6 +56,38 @@ jobs:
             CONFIG_REPRODUCIBLE_DEBUG_INFO=y
 
             CONFIG_PACKAGE_luci=y
+            CONFIG_PACKAGE_luci-app-meshdesk=y
+            CONFIG_PACKAGE_MESHdesk=y
+            CONFIG_PACKAGE_kmod-batman-adv=y
+            CONFIG_PACKAGE_lua-mosquitto=y
+            CONFIG_PACKAGE_libiwinfo-lua=y
+            CONFIG_PACKAGE_luasocket=y
+            CONFIG_PACKAGE_libuci-lua=y
+            CONFIG_PACKAGE_luci-compat=y
+            CONFIG_PACKAGE_luci-theme-material=y
+            CONFIG_PACKAGE_luci-lib-httpclient=y
+            CONFIG_PACKAGE_luci-lib-httpprotoutils=y
+            CONFIG_PACKAGE_luci-lib-json=y
+            CONFIG_PACKAGE_luci-lib-jsonc=y
+            CONFIG_PACKAGE_coova-chilli=y
+            CONFIG_COOVACHILLI_JSONINTERFACE=y
+            CONFIG_COOVACHILLI_OPENSSL=y
+            CONFIG_PACKAGE_curl=y
+            CONFIG_PACKAGE_relayd=y
+            CONFIG_PACKAGE_mosquitto-client-ssl=y
+            CONFIG_PACKAGE_lua-mosquitto=y
+            CONFIG_PACKAGE_wpad=y
+            CONFIG_PACKAGE_batctl=y
+            CONFIG_PACKAGE_iptables-nft=y
+            CONFIG_PACKAGE_luci-lib-nixio=y
+            CONFIG_PACKAGE_luci-lib-base=y
+            CONFIG_PACKAGE_openvpn-openssl=y
+            CONFIG_PACKAGE_iw-full=y
+            CONFIG_PACKAGE_sqm-scripts=y
+            CONFIG_PACKAGE_luci-app-sqm=y
+            CONFIG_PACKAGE_kmod-nft-bridge=y
+            CONFIG_PACKAGE_kmod-dummy=y
+            CONFIG_PACKAGE_wpad=y
           EOF
           make defconfig
 
