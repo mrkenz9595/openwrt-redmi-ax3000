@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Free disk space
         run: |
@@ -19,7 +19,7 @@ jobs:
             git libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Hook the openwrt_core URL for opkg
         run: |
@@ -34,6 +34,7 @@ jobs:
         run: |
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          git clone --depth 1 https://github.com/RADIUSdesk/openwrt-meshdesk package/openwrt-meshdesk
 
       - name: Configure
         run: |
@@ -53,6 +54,38 @@ jobs:
             CONFIG_REPRODUCIBLE_DEBUG_INFO=y
 
             CONFIG_PACKAGE_luci=y
+            CONFIG_PACKAGE_luci-app-meshdesk=y
+            CONFIG_PACKAGE_MESHdesk=y
+            CONFIG_PACKAGE_kmod-batman-adv=y
+            CONFIG_PACKAGE_lua-mosquitto=y
+            CONFIG_PACKAGE_libiwinfo-lua=y
+            CONFIG_PACKAGE_luasocket=y
+            CONFIG_PACKAGE_libuci-lua=y
+            CONFIG_PACKAGE_luci-compat=y
+            CONFIG_PACKAGE_luci-theme-material=y
+            CONFIG_PACKAGE_luci-lib-httpclient=y
+            CONFIG_PACKAGE_luci-lib-httpprotoutils=y
+            CONFIG_PACKAGE_luci-lib-json=y
+            CONFIG_PACKAGE_luci-lib-jsonc=y
+            CONFIG_PACKAGE_coova-chilli=y
+            CONFIG_COOVACHILLI_JSONINTERFACE=y
+            CONFIG_COOVACHILLI_OPENSSL=y
+            CONFIG_PACKAGE_curl=y
+            CONFIG_PACKAGE_relayd=y
+            CONFIG_PACKAGE_mosquitto-client-ssl=y
+            CONFIG_PACKAGE_lua-mosquitto=y
+            CONFIG_PACKAGE_wpad=y
+            CONFIG_PACKAGE_batctl=y
+            CONFIG_PACKAGE_iptables-nft=y
+            CONFIG_PACKAGE_luci-lib-nixio=y
+            CONFIG_PACKAGE_luci-lib-base=y
+            CONFIG_PACKAGE_openvpn-openssl=y
+            CONFIG_PACKAGE_iw-full=y
+            CONFIG_PACKAGE_sqm-scripts=y
+            CONFIG_PACKAGE_luci-app-sqm=y
+            CONFIG_PACKAGE_kmod-nft-bridge=y
+            CONFIG_PACKAGE_kmod-dummy=y
+            CONFIG_PACKAGE_wpad=y
           EOF
           make defconfig
 
@@ -73,25 +106,25 @@ jobs:
           make -j$(nproc) IGNORE_ERRORS=1
 
       - name: Upload bin to artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bin-ipq50xx-arm
           path: bin/targets/ipq50xx/arm/*
 
       - name: Upload dl to artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dl
           path: dl/*
 
   gh-pages:
     needs: [ build ]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
       - name: Checkout gh-pages
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: 'gh-pages'
           ref: 'gh-pages'
@@ -113,7 +146,7 @@ jobs:
           git rebase --continue
 
       - name: Download bin from artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: bin-ipq50xx-arm
           path: bin/
@@ -137,21 +170,21 @@ jobs:
 
   release:
     needs: [ build ]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download dl from artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dl
           path: dl/
 
       - name: Download bin from artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: bin-ipq50xx-arm
           path: bin/targets/ipq50xx/arm/
