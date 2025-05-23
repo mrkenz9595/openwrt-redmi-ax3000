@@ -34,7 +34,7 @@ jobs:
         run: |
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-          git clone --depth 1 https://github.com/RADIUSdesk/openwrt-meshdesk
+          git clone --depth 1 https://github.com/RADIUSdesk/openwrt-meshdesk package/openwrt-meshdesk
 
       - name: Configure
         run: |
