@@ -35,6 +35,7 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           git clone --depth 1 https://github.com/RADIUSdesk/openwrt-meshdesk package/openwrt-meshdesk
+          sed -i 's|include ../../luci.mk|include $(TOPDIR)/feeds/luci/luci.mk|' package/openwrt-meshdesk/luci-app-meshdesk/Makefile
 
       - name: Configure
         run: |
